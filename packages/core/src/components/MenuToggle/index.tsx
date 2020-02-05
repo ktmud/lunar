@@ -186,7 +186,16 @@ export class MenuToggle extends React.Component<Props & WithStylesProps, State> 
     );
 
     if (toggleElement) {
-      toggleButton = <span onClick={this.handleToggleMenu}>{toggleElement}</span>;
+      toggleButton = (
+        <span
+          tabIndex={0}
+          role="button"
+          onKeyPress={this.handleToggleMenu}
+          onClick={this.handleToggleMenu}
+        >
+          {toggleElement}
+        </span>
+      );
     }
 
     return (

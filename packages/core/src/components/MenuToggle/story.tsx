@@ -36,7 +36,7 @@ aBasicMenuWithMenuItems.story = {
   name: 'A basic menu with menu items.',
 };
 
-export function withCustomTrigger() {
+export function withCustomElement() {
   return (
     <MenuToggle
       accessibilityLabel="Actions"
@@ -53,8 +53,8 @@ export function withCustomTrigger() {
   );
 }
 
-withCustomIcon.story = {
-  name: 'With custom icon.',
+withCustomElement.story = {
+  name: 'With custom menu trigger.',
 };
 
 export function withCustomIcon() {
