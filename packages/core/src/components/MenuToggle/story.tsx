@@ -40,7 +40,7 @@ export function withCustomTrigger() {
   return (
     <MenuToggle
       accessibilityLabel="Actions"
-      toggleTrigger={
+      toggleElement={
         <>
           Custom <Emoji unicode="🐱" /> Menu <Emoji unicode="🐱" /> Trigger
         </>

@@ -41,7 +41,7 @@ export type Props = {
   /** Toggle button text. */
   toggleLabel: NonNullable<React.ReactNode>;
   /** Custom toggle trigger. */
-  toggleTrigger?: React.ReactNode;
+  toggleElement?: React.ReactNode;
   /** Z-index of the menu. */
   zIndex?: number;
   /** @ignore @private */
@@ -151,7 +151,7 @@ export class MenuToggle extends React.Component<Props & WithStylesProps, State> 
       styles,
       toggleIcon,
       toggleLabel,
-      toggleTrigger,
+      toggleElement,
       zIndex,
     } = this.props;
     let iconSize = '1.5em';
@@ -164,7 +164,7 @@ export class MenuToggle extends React.Component<Props & WithStylesProps, State> 
 
     const Button = muted ? MutedButton : BaseButton;
 
-    const configuredToggleButton = toggleIcon ? (
+    let toggleButton = toggleIcon ? (
       <IconButton
         disabled={disabled}
         aria-label={accessibilityLabel}
@@ -185,11 +185,9 @@ export class MenuToggle extends React.Component<Props & WithStylesProps, State> 
       </Button>
     );
 
-    const toggleButton = toggleTrigger ? (
-      <span onClick={this.handleToggleMenu}>{toggleTrigger}</span>
-    ) : (
-      configuredToggleButton
-    );
+    if (toggleElement) {
+      toggleButton = <span onClick={this.handleToggleMenu}>{toggleElement}</span>;
+    }
 
     return (
       <div ref={this.ref} className={cx(styles.container)}>
