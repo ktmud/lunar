@@ -1,5 +1,10 @@
 import React from 'react';
-import { CellMeasurerCache, SortDirection, SortDirectionType, Table } from 'react-virtualized';
+import {
+  CellMeasurerCache,
+  SortDirection,
+  SortDirectionType,
+  Table,
+} from 'react-virtualized';
 import memoize from 'lodash/memoize';
 import { styleSheetDataTable as styleSheet } from './styles';
 import sortData from './helpers/sortData';
@@ -28,7 +33,10 @@ export type DataTableState = {
 };
 
 /** A dynamic and responsive table for displaying tabular data. */
-export class DataTable extends React.Component<DataTableProps & WithStylesProps, DataTableState> {
+export class DataTable extends React.Component<
+  DataTableProps & WithStylesProps,
+  DataTableState
+> {
   static defaultProps: Pick<DataTableProps, DefaultDataTableProps> = {
     autoHeight: false,
     columnHeaderHeight: undefined,
@@ -85,7 +93,7 @@ export class DataTable extends React.Component<DataTableProps & WithStylesProps,
     background: getRowColor(
       expandedDataList[index],
       index,
-      this.props.zebra || false,
+      this.props.zebra ?? false,
       this.props.theme,
     ),
     display: 'flex',
@@ -105,7 +113,13 @@ export class DataTable extends React.Component<DataTableProps & WithStylesProps,
     ): IndexedParentRow[] => {
       const { sortByValue } = this.props;
       const indexedData = indexData(data);
-      const sortedData = sortData(indexedData, this.keys, sortBy, sortDirection, sortByValue);
+      const sortedData = sortData(
+        indexedData,
+        this.keys,
+        sortBy,
+        sortDirection,
+        sortByValue,
+      );
 
       return sortedData;
     },
@@ -113,9 +127,17 @@ export class DataTable extends React.Component<DataTableProps & WithStylesProps,
   );
 
   componentDidUpdate(prevProps: DataTableProps, prevState: DataTableState) {
-    const { dynamicRowHeight, data, filterData, width, height, sortByCacheKey } = this.props;
+    const {
+      dynamicRowHeight,
+      data,
+      filterData,
+      width,
+      height,
+      sortByCacheKey,
+    } = this.props;
     const { sortBy, sortDirection } = this.state;
-    const dimensionsChanged = width !== prevProps.width || height !== prevProps.height;
+    const dimensionsChanged =
+      width !== prevProps.width || height !== prevProps.height;
     const sortChanged = sortByCacheKey !== prevProps.sortByCacheKey;
     const sortedData: IndexedParentRow[] = this.getData(
       data!,
@@ -130,7 +152,8 @@ export class DataTable extends React.Component<DataTableProps & WithStylesProps,
       (filteredData.length !== oldFilteredData.length ||
         filteredData.some(
           (x: IndexedParentRow, i: number) =>
-            x.metadata.originalIndex !== oldFilteredData[i].metadata.originalIndex,
+            x.metadata.originalIndex !==
+            oldFilteredData[i].metadata.originalIndex,
         ));
 
     if (this.props.data !== prevProps.data) {
@@ -139,7 +162,10 @@ export class DataTable extends React.Component<DataTableProps & WithStylesProps,
       this.setState({
         expandedRows: new Set(),
       });
-    } else if (dynamicRowHeight && (filteredDataChanged || dimensionsChanged || sortChanged)) {
+    } else if (
+      dynamicRowHeight &&
+      (filteredDataChanged || dimensionsChanged || sortChanged)
+    ) {
       // We need to make sure the cache is cleared before React tries to re-render.
       if (!this.timeoutId) {
         this.timeoutId = window.setTimeout(() => {
@@ -172,7 +198,10 @@ export class DataTable extends React.Component<DataTableProps & WithStylesProps,
         }
         this.forceUpdate();
       } else {
-        return expandedDataList.length * getHeight(rowHeight) + this.getColumnHeaderHeight();
+        return (
+          expandedDataList.length * getHeight(rowHeight) +
+          this.getColumnHeaderHeight()
+        );
       }
     }
 
@@ -248,13 +277,20 @@ export class DataTable extends React.Component<DataTableProps & WithStylesProps,
       <TableHeader
         tableHeaderLabel={tableHeaderLabel}
         height={getHeight(rowHeight, tableHeaderHeight)}
-        width={this.props.width ? Math.min(this.props.width, parentWidth) : parentWidth}
+        width={
+          this.props.width
+            ? Math.min(this.props.width, parentWidth)
+            : parentWidth
+        }
       />
     );
   }
 
-  rowGetter = (expandedDataList: ExpandedRow[]) => ({ index }: { index: number }) =>
-    expandedDataList[index];
+  rowGetter = (expandedDataList: ExpandedRow[]) => ({
+    index,
+  }: {
+    index: number;
+  }) => expandedDataList[index];
 
   public cache = new CellMeasurerCache({
     fixedHeight: false,
@@ -293,17 +329,25 @@ export class DataTable extends React.Component<DataTableProps & WithStylesProps,
 
     const filteredData = filterData!(sortedData);
 
-    const expandedData = expandData(filteredData, expandedRows, sortBy, this.keys, sortDirection);
+    const expandedData = expandData(
+      filteredData,
+      expandedRows,
+      sortBy,
+      this.keys,
+      sortDirection,
+    );
 
     const tableHeight = autoHeight
       ? (height || 0) -
-        (this.shouldRenderTableHeader() ? getHeight(rowHeight, tableHeaderHeight) : 0)
+        (this.shouldRenderTableHeader()
+          ? getHeight(rowHeight, tableHeaderHeight)
+          : 0)
       : this.getTableHeight(expandedData);
 
     return (
       <>
         {this.shouldRenderTableHeader() && this.renderTableHeader(width!)}
-        <div className={cx(styles.table_container, { width })}>
+        <div className={cx(styles.tableContainer, { width })}>
           <Table
             ref={propagateRef}
             height={tableHeight}
@@ -315,14 +359,19 @@ export class DataTable extends React.Component<DataTableProps & WithStylesProps,
             sortDirection={sortDirection}
             headerHeight={this.getColumnHeaderHeight()}
             headerRowRenderer={ColumnLabels(this.props)}
-            rowHeight={dynamicRowHeight ? this.cache.rowHeight : HEIGHT_TO_PX[rowHeight!]}
+            rowHeight={
+              dynamicRowHeight ? this.cache.rowHeight : HEIGHT_TO_PX[rowHeight!]
+            }
             rowStyle={this.getRowStyle(expandedData)}
             overscanRowCount={
-              dynamicRowHeight && showAllRows ? expandedData.length : overscanRowCount!
+              dynamicRowHeight && showAllRows
+                ? expandedData.length
+                : overscanRowCount!
             }
             onRowClick={this.handleRowClick}
           >
-            {expandable && renderExpandableColumn(cx, styles, expandedRows, this.expandRow)}
+            {expandable &&
+              renderExpandableColumn(cx, styles, expandedRows, this.expandRow)}
             {renderDataColumns(this.keys, this.cache, this.props)}
           </Table>
         </div>

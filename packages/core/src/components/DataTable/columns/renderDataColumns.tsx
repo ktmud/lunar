@@ -64,7 +64,10 @@ export default function renderDataColumns<T>(
       }
     }
 
-    const contents = React.createElement(customRenderer || DefaultRenderer, rendererArguments);
+    const contents = React.createElement(
+      customRenderer ?? DefaultRenderer,
+      rendererArguments,
+    );
 
     return (
       <Spacing left={isLeftmost ? 0 : spacing} right={isRightmost ? 0 : 2}>
@@ -103,7 +106,13 @@ export default function renderDataColumns<T>(
   };
 
   return keys.map((key, idx: number) => {
-    const widthPropertiesOptions = ['maxWidth', 'minWidth', 'width', 'flexGrow', 'flexShrink'];
+    const widthPropertiesOptions = [
+      'maxWidth',
+      'minWidth',
+      'width',
+      'flexGrow',
+      'flexShrink',
+    ];
     const widthProperties: WidthProperties = {};
     widthPropertiesOptions.forEach((property) => {
       widthProperties[property] =
@@ -127,7 +136,7 @@ export default function renderDataColumns<T>(
         cellRenderer={columnCellRenderer(idx)}
         className={cx(
           styles?.column,
-          showColumnDividers && !isRightmost && styles && styles.column_divider,
+          showColumnDividers && !isRightmost && styles?.columnDivider,
         )}
       />
     );

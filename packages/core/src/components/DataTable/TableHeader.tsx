@@ -15,7 +15,12 @@ export type Props = {
 };
 
 /** Header for the DataTable that displays a title. */
-export default function TableHeader({ height, tableHeaderLabel, width, styleSheet }: Props) {
+export default function TableHeader({
+  height,
+  tableHeaderLabel,
+  width,
+  styleSheet,
+}: Props) {
   const [styles, cx] = useStyles(styleSheet ?? styleSheetTableHeader);
 
   const dimensionStyles: React.CSSProperties = {
@@ -27,7 +32,7 @@ export default function TableHeader({ height, tableHeaderLabel, width, styleShee
 
   return (
     <div style={dimensionStyles}>
-      <div className={cx(styles.tableHeader_inner)}>{label}</div>
+      <div className={cx(styles.tableHeaderInner)}>{label}</div>
     </div>
   );
 }
