@@ -14,9 +14,9 @@ export type DropdownProps = {
   /** Callback fired when dropdown is unfocused. */
   onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
   /** Callback fired when a click occurs inside the dropdown when `visible`. */
-  onClickInside?: (event: MouseEvent) => void;
+  onClickInside?: (event: UIEvent) => void;
   /** Callback fired when a click occurs outside the dropdown when `visible`. */
-  onClickOutside?: (event: MouseEvent) => void;
+  onClickOutside?: (event: UIEvent) => void;
   /** Callback fired when dropdown is focused. */
   onFocus?: (event: React.FocusEvent<HTMLDivElement>) => void;
   /** Right offset. */
@@ -48,7 +48,7 @@ export default function Dropdown({
   const ref = useRef<HTMLDivElement | null>(null);
 
   const handleClick = useCallback(
-    (event: MouseEvent) => {
+    (event: UIEvent) => {
       const { current } = ref;
 
       if (current?.contains(event.target as Element)) {
